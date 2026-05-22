@@ -36,7 +36,13 @@ Forminator Data Display turns your Forminator form submissions into beautiful su
 
 ## Usage
 
-### Basic Shortcode
+### Basic Shortcodes
 
+#### Form table:
 ```shortcode
 [ffd id="YOUR_FORM_ID"]
+```
+#### Form total submissions:
+```shortcode
+[ffd-short id="YOUR_FORM_ID"]
+```
