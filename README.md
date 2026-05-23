@@ -11,13 +11,11 @@
  - WordPress 7.0
  - Forminator 1.53  
 
-A lightweight WordPress plugin that displays summarized data from **Forminator** forms. It extracts and visualizes only **selection fields** (radio, checkbox, select, etc.) with submission counts in clean, easy-to-read tables.
-
 ---
 
 ## Description
 
-Forminator Data Display turns your Forminator form submissions into beautiful summary statistics. Perfect for surveys, polls, quizzes, and feedback forms where you want to show results publicly or internally.
+A lightweight WordPress plugin that displays summarized data from **Forminator** forms. It extracts and visualizes only **selection fields** (radio, checkbox, select, etc.) with submission counts in clean, easy-to-read tables.
 
 **Key Features:**
 
@@ -40,11 +38,11 @@ Forminator Data Display turns your Forminator form submissions into beautiful su
 
 ### Basic Shortcodes
 
-#### Form table:
+#### Form table (use in accordions):
 ```shortcode
 [ffd id="YOUR_FORM_ID"]
 ```
-#### Form total submissions:
+#### Form total submissions (use in accordion titles):
 ```shortcode
 [ffd-short id="YOUR_FORM_ID"]
 ```
