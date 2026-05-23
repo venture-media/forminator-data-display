@@ -11,8 +11,8 @@
 
         const rows = table.querySelectorAll('tbody tr');
         let maxCount = -1;
-        let maxRow = null;
 
+        // First pass: find the true maximum count
         rows.forEach(function (row) {
             const tds = row.querySelectorAll('td');
             if (tds.length < 2) return;
@@ -25,15 +25,25 @@
 
             if (!isNaN(count) && count > maxCount) {
                 maxCount = count;
-                maxRow = row;
             }
         });
 
-        // Inline !important background to every <td> in the winning row
-        if (maxRow) {
-            const cells = maxRow.querySelectorAll('td');
-            cells.forEach(function (cell) {
-                cell.style.setProperty('background-color', '#d4edda', 'important');
+        // Second pass: highlight every row that matches the maximum count
+        if (maxCount > -1) {
+            rows.forEach(function (row) {
+                const tds = row.querySelectorAll('td');
+                if (tds.length < 2) return;
+                if (tds[0].textContent.trim() === 'Total') return;
+
+                const countText = tds[1].textContent.trim();
+                const count = parseInt(countText, 10);
+
+                if (count === maxCount) {
+                    const cells = row.querySelectorAll('td');
+                    cells.forEach(function (cell) {
+                        cell.style.setProperty('background-color', '#d4edda', 'important');
+                    });
+                }
             });
         }
     }
@@ -51,7 +61,7 @@
     const observer = new MutationObserver(highlightAllTables);
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Extra safety for accordion clicks
+    // Watch for accordion clicks
     document.addEventListener('click', function (e) {
         if (e.target.closest('.elementor-accordion-item') || e.target.closest('.elementor-tab-title')) {
             setTimeout(highlightAllTables, 150);
