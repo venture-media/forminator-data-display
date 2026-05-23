@@ -4,11 +4,14 @@
 (function () {
     'use strict';
 
-    function highlightHighestInTable(table) {
-        // Prevent running twice on the same table
-        if (table.classList.contains('ffd-highlighted')) return;
-        table.classList.add('ffd-highlighted');
+    function getCleanCount(td) {
+        if (!td) return 0;
+        // Remove ALL non-numeric characters
+        const text = td.textContent.replace(/\D/g, '').trim();
+        return parseInt(text, 10) || 0;
+    }
 
+    function highlightHighestInTable(table) {
         const rows = table.querySelectorAll('tbody tr');
         let maxCount = -1;
 
@@ -20,10 +23,8 @@
             // Skip the "Total" row
             if (tds[0].textContent.trim() === 'Total') return;
 
-            const countText = tds[1].textContent.trim();
-            const count = parseInt(countText, 10);
-
-            if (!isNaN(count) && count > maxCount) {
+            const count = getCleanCount(tds[1]);
+            if (count > maxCount) {
                 maxCount = count;
             }
         });
@@ -35,8 +36,7 @@
                 if (tds.length < 2) return;
                 if (tds[0].textContent.trim() === 'Total') return;
 
-                const countText = tds[1].textContent.trim();
-                const count = parseInt(countText, 10);
+                const count = getCleanCount(tds[1]);
 
                 if (count === maxCount) {
                     const cells = row.querySelectorAll('td');
@@ -49,22 +49,21 @@
     }
 
     function highlightAllTables() {
-        const tables = document.querySelectorAll('table.ffd-table');
-        tables.forEach(highlightHighestInTable);
+        document.querySelectorAll('table.ffd-table').forEach(highlightHighestInTable);
     }
 
     // Run on page load
     document.addEventListener('DOMContentLoaded', highlightAllTables);
     window.addEventListener('load', highlightAllTables);
 
-    // Watch for Elementor accordions opening
+    // Watch for Elementor accordions / dynamic content
     const observer = new MutationObserver(highlightAllTables);
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Watch for accordion clicks
+    // Extra trigger when accordions open
     document.addEventListener('click', function (e) {
         if (e.target.closest('.elementor-accordion-item') || e.target.closest('.elementor-tab-title')) {
-            setTimeout(highlightAllTables, 150);
+            setTimeout(highlightAllTables, 300);
         }
     });
 })();
