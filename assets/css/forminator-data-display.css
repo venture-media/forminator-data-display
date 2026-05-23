@@ -1,0 +1,6 @@
+/**
+ * Forminator Data Display - Highlight CSS
+ */
+.ffd-table tr.ffd-winner-row td {
+    background-color: #d4edda !important;
+}
