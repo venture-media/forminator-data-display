@@ -3,7 +3,7 @@
  * Plugin Name:       Forminator Data Display
  * Plugin URI:        https://github.com/venture-media/forminator-data-display
  * Description:       Displays ONLY selection fields from Forminator forms + total submissions shortcode.
- * Version:           0.9.3
+ * Version:           0.9.4
  * Author:            Leon de Klerk
  * License:           MIT license
  * Text Domain:       forminator-data-display
@@ -15,16 +15,39 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Plugin version constant
+define( 'FORMINATOR_DATA_DISPLAY_VERSION', '0.9.4' );
+
 class Forminator_Data_Display {
 
     public function __construct() {
         add_shortcode( 'ffd', array( $this, 'render_form_data' ) );
         add_shortcode( 'ffd-short', array( $this, 'render_form_total' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
     }
 
-    /**
-     * Shortcode [ffd-short id="123" class="my-custom-class"]
-     */
+
+     // Enqueue CSS + JS for highlight
+    public function enqueue_assets() {
+        // CSS
+        wp_enqueue_style(
+            'forminator-data-display-css',
+            plugin_dir_url( __FILE__ ) . 'assets/css/forminator-data-display.css',
+            array(),
+            FORMINATOR_DATA_DISPLAY_VERSION
+        );
+
+        // JS
+        wp_enqueue_script(
+            'forminator-data-display-js',
+            plugin_dir_url( __FILE__ ) . 'assets/js/forminator-data-display.js',
+            array(),
+            FORMINATOR_DATA_DISPLAY_VERSION,
+            true
+        );
+    }
+
+     // Shortcode [ffd-short id="123" class="my-custom-class"]
     public function render_form_total( $atts ) {
         $atts = shortcode_atts( array(
             'id'    => 0,
@@ -47,7 +70,6 @@ class Forminator_Data_Display {
         return '<span class="' . esc_attr( $class ) . '">' . esc_html( $total ) . '</span>';
     }
 
-    // render_form_data()
     public function render_form_data( $atts ) {
         $atts = shortcode_atts( array(
             'id' => 0,
@@ -136,7 +158,7 @@ class Forminator_Data_Display {
             $grand_total = array_sum( $counts );
 
             $output .= '<h3>' . esc_html( $field_label ) . '</h3>';
-            $output .= '<table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%; max-width:1200px;">';
+            $output .= '<table class="ffd-table" border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%; max-width:1200px;">';
             $output .= '<thead><tr><th class="ffd-col1" style="text-align:left;">Option</th><th class="ffd-col2" style="text-align:center;">Total Submissions</th></tr></thead>';
             $output .= '<tbody>';
             foreach ( $counts as $label => $total ) {
