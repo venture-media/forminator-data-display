@@ -1,5 +1,7 @@
 # Forminator Data Display
 
+<img src="https://github.com/venture-media/forminator-data-display/blob/ce8ade296315704c34bc7fec47798aeef8921b43/docs/screenshot.png" width="100%">
+
 **Plugin Name:** Forminator Data Display  
 **Author:** [Leon de Klerk](https://github.com/Leon2332)  
 **License:** MIT
